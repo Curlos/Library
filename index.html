@@ -43,14 +43,24 @@
       <div class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-             
-            <form>
+
+            <div class="bookSearch">
               <div class="row">
                 <div class="twelve columns">
-                  <label for="bookTitle">Title</label>
-                  <input class="u-full-width" type="text" placeholder="Book Title" id="bookTitle">
+                  <label for="bookTitle">Search book</label>
+                  <input class="u-full-width" type="text" placeholder="Book Author" id="searchInput">
+              </div>
+            </div>
+            
+             
+            <div class="addBookForm" hidden>
+              <form>
+                <div class="row">
+                  <div class="twelve columns">
+                    <label for="bookTitle">Title</label>
+                    <input class="u-full-width" type="text" placeholder="Book Title" id="bookTitle">
                 </div>
-
+  
                 <div class="row">
                   <div class="twelve columns">
                     <label for="bookTitle">Author</label>
@@ -78,15 +88,16 @@
                       <option value="Option 2">Not started</option>
                       <option value="Option 3">Completed</option>
                     </select>
+                  </div>
                 </div>
 
                 <div class="row">
                   <div class="twelve columns">
                     <input class="button-primary" type="button" id="addBookSubmit" value="Add book">
                 </div>
-                
-              </div>
-            </form>
+            
+              </form>
+            </div>
         </div>
       </div>
 
