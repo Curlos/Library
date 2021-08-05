@@ -19,6 +19,8 @@
     padding: 1rem 1.5rem;
     width: 75rem;
     border-radius: 0.5rem;
+    height: 80vh;
+    overflow-y: auto;
 }
 .close-button {
     float: right;
@@ -37,4 +39,11 @@
     visibility: visible;
     transform: scale(1.0);
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.searchResults {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
