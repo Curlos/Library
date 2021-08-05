@@ -10,11 +10,17 @@ const Book = () => {
 
 }
 
-const addBookToLibrary = (book) => {
-    myLibrary.push(book)
-    console.log(book)
-    const bookDiv = document.createElement('div')
-    bookDiv.classList.add('')
+const addBookToLibrary = (event) => {
+    const bookElem = event.target
+    console.log(bookElem.parentElement)
+    // myLibrary.push(book)
+    // console.log(book)
+    // const bookDiv = document.createElement('div')
+    // bookDiv.classList.add('')
+}
+
+const deleteBookFromLibrary = (event) => {
+
 }
 
 const fetchFromAPI = async (event) => {
@@ -24,18 +30,20 @@ const fetchFromAPI = async (event) => {
     const data = await response.json()
     const books = data.items
     console.log(data)
-    displaySearchResults(books.slice(0, 10))
+    displaySearchResults(books)
 }
 
 const displaySearchResults = (books) => {
     searchResults.innerHTML = ''
+    let index = 0
     for (let book of books) {
         console.log(book.volumeInfo)
-        createBookElement(book.volumeInfo)
+        createBookElement(book.volumeInfo, index, 'add')
+        index++
     }
 }
 
-const createBookElement = (book) => {
+const createBookElement = (book, index, buttonType) => {
     if (!book.imageLinks) {
         return
     }
@@ -47,15 +55,33 @@ const createBookElement = (book) => {
     const authorElem = document.createElement('div')
     const ratingsElem = document.createElement('div')
     const pageCountElem = document.createElement('div')
+    let bookButton = ''
+
+    if (buttonType == 'add') {
+        const addBookButton = document.createElement('button')
+        addBookButton.value = `book${index}`
+        addBookButton.textContent = 'Add book'
+        addBookButton.classList.add('button-primary')
+        addBookButton.addEventListener('click', addBookToLibrary)
+        bookButton = addBookButton
+    } else if (buttonType == 'delete') {
+        const deleteBookButton = document.createElement('button')
+        deleteBookButton.value = `book${index}`
+        deleteBookButton.textContent = 'Remove book'
+        deleteBookButton.classList.add('button-primary')
+        deleteBookButton.addEventListener('click', deleteBookFromLibrary)
+        bookButton = deleteBookButton
+    }
+    
 
     linkElem.setAttribute('href', book.canonicalVolumeLink)
     linkElem.setAttribute('target', '_blank')
     imgElem.src = book.imageLinks.thumbnail
     imgElem.classList.add('bookCover')
-    titleElem.textContent = 'Title: ' + book.title
-    authorElem.textContent = 'Author: ' + book.authors[0]
-    ratingsElem.textContent = 'Rating: ' + (book.averageRating != undefined ? book.averageRating : 'No ratings')
-    pageCountElem.textContent = 'Page count: ' + book.pageCount
+    titleElem.textContent = 'Title: ' + (book.title != undefined ? book.title : 'Unknown')
+    authorElem.textContent = 'Author: ' + (book.authors[0] != undefined ? book.authors[0] : 'Unknown')
+    ratingsElem.textContent = 'Rating: ' + (book.averageRating != undefined ? book.averageRating : 'Unknown')
+    pageCountElem.textContent = 'Page count: ' + (book.pageCount != undefined ? book.pageCount : 'Unknown')
     
     linkElem.append(imgElem)
     bookElem.append(linkElem)
@@ -63,7 +89,8 @@ const createBookElement = (book) => {
     bookElem.append(authorElem)
     bookElem.append(ratingsElem)
     bookElem.append(pageCountElem)
-    bookElem.classList.add('bookSearchResult')
+    bookElem.append(bookButton)
+    bookElem.classList.add('bookSearchResult', `book${index}`)
     searchResults.append(bookElem)
 }
 
