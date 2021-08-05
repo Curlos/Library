@@ -1,17 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library</title>
-    <link rel="stylesheet" href="style.css">
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Library</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
 </head>
 <body>
-    <div>
-        
-    </div>
-</body>
 
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <div class="row">
+      <div style="margin-top: 25%">
+        <h4>Library</h4>
+      </div>
+
+      <input class="button-primary trigger" type="button" value="Add book">
+
+      <div class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+             
+            <form>
+              <div class="row">
+                <div class="twelve columns">
+                  <label for="bookTitle">Title</label>
+                  <input class="u-full-width" type="text" placeholder="Book Title" id="bookTitle">
+                </div>
+
+                <div class="row">
+                  <div class="twelve columns">
+                    <label for="bookTitle">Author</label>
+                    <input class="u-full-width" type="text" placeholder="Book Author" id="bookAuthor">
+                </div>
+
+                <div class="row">
+                  <div class="twelve columns">
+                    <label for="bookTitle">Pages read</label>
+                    <input class="u-full-width" type="text" placeholder="Book Author" id="bookAuthor">
+                </div>
+
+                <div class="row">
+                  <div class="twelve columns">
+                    <label for="bookTitle">Total pages</label>
+                    <input class="u-full-width" type="text" placeholder="Book Author" id="bookAuthor">
+                </div>
+      
+                <div class="row">
+                  <div class="twelve columns">
+
+                    <label for="bookStatus">Status</label>
+                    <select class="u-full-width" id="exampleRecipientInput">
+                      <option value="Option 1">Reading</option>
+                      <option value="Option 2">Not started</option>
+                      <option value="Option 3">Completed</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                  <div class="twelve columns">
+                    <input class="button-primary" type="button" id="addBookSubmit" value="Add book">
+                </div>
+                
+              </div>
+            </form>
+        </div>
+      </div>
+
+      <div class="library" id="library">
+        
+      </div>
+    </div>
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
 <script src="script.js"></script>
 </html>
