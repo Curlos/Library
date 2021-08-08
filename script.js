@@ -16,6 +16,32 @@ const Book = (title, author, totalPages, pagesRead=0, readStatus='Not started') 
     return { getTitle, getAuthor, getTotalPages, getPagesRead, getReadStatus }
 }
 
+const createBookHtml = (title, author, pageCount, pagesRead, readStatus) => {
+    const bookHtml = `<div class="book">
+        <div class="editBook">
+            <span class="remove">Remove</span>
+            <span class="edit">Edit</span>
+        </div>
+
+        <div class="bookInfo">
+            <div class="bookInfoText">
+                <div class="title">${title}</div>
+                <div class="author">${author}</div>
+                <div class="pages">${pageCount} pages</div>
+                <div class="readStatus">${readStatus}</div>
+            </div>
+        </div>
+
+        <div class="pagesRead">
+            <span class="minusPagesRead">-</span>
+            <span class="pagesReadNum">${pagesRead}/${pageCount}</span>
+            <span class="plusPagesRead">+</span>
+        </div>
+    </div>`
+
+    return bookHtml
+}
+
 const addBookToLibrary = (event) => {
     const bookElem = event.target
     console.log(bookElem.parentElement)
@@ -34,6 +60,28 @@ const addBookToLibrary = (event) => {
     console.log(title)
     console.log(author)
     console.log(Number(pageCount))
+
+    const bookHtml = `<div class="book">
+        <div class="editBook">
+            <span class="remove">Remove</span>
+            <span class="edit">Edit</span>
+        </div>
+
+        <div class="bookInfo">
+            <div class="bookInfoText">
+                <div class="title">One Piece Vol. 100</div>
+                <div class="author">Eiichiro Oda</div>
+                <div class="pages">200 pages</div>
+                <div class="readStatus">Finished reading</div>
+            </div>
+        </div>
+
+        <div class="pagesRead">
+            <span class="minusPagesRead">-</span>
+            <span class="completePagesRead">12000/12000</span>
+            <span class="plusPagesRead">+</span>
+        </div>
+    </div>`
 
     // myLibrary.push(book)
     // console.log(book)

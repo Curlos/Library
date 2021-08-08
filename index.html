@@ -33,72 +33,97 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
     <div class="row">
-      <h4>Library</h4>
+      <div class="navbar">
+        <ul>
+          <li><a href="">Library</a></li>
+          <li style="float:right"><a href="">Sign In</a></li>
+        </ul>
+      </div>
+
+      <div class="mainPage">
+        <input class="button-primary trigger" type="button" value="Search for books from public library"></br>
+
+        
+
+        <div class="bookSearch">
+          <label for="bookTitle">Search book</label>
+          <input class="u-full-width" type="text" placeholder="Book Author" id="searchInput">
+          <div class="searchResults" id="searchResults"></div>
+        </div>
+
+        <div class="library" id="library">
+          <div class="book">
+            <div class="editBook">
+              <span class="remove">Remove</span>
+              <span class="edit">Edit</span>
+            </div>
+
+            <div class="bookInfo">
+              <div class="bookInfoText">
+                <div class="title">One Piece Vol. 100</div>
+                <div class="author">Eiichiro Oda</div>
+                <div class="pages">200 pages</div>
+                <div class="readStatus">Finished reading</div>
+              </div>
+            </div>
+
+            <div class="pagesRead">
+              <span class="minusPagesRead">-</span>
+              <span class="pagesReadNum">12000/12000</span>
+              <span class="plusPagesRead">+</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <i class="fas fa-plus-circle fa-5x trigger"></i>
 
-      <input class="button-primary trigger" type="button" value="Search for books from public library"></br>
+      <div class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
 
+            <div class="addBookForm">
+              <form>
+                <div class="row">
+                  <div class="twelve columns">
+                    <label for="bookTitle">Title</label>
+                    <input class="u-full-width" type="text" placeholder="Book Title" id="bookTitle">
+                </div>
+
+                <div class="row">
+                  <div class="twelve columns">
+                    <label for="bookTitle">Author</label>
+                    <input class="u-full-width" type="text" placeholder="Book Author" id="bookAuthor">
+                </div>
+
+                <div class="row">
+                  <div class="twelve columns">
+                    <label for="bookTitle">Pages read</label>
+                    <input class="u-full-width" type="text" placeholder="Book Author" id="pagesRead">
+                </div>
+
+                <div>
+                  <label for="bookTitle">Total pages</label>
+                  <input class="u-full-width" type="text" placeholder="Book Author" id="totalPages">
+                </div>
       
+                <div class="row">
+                  <label for="bookStatus">Status</label>
+                    <select class="u-full-width" id="exampleRecipientInput">
+                      <option value="Option 1">Reading</option>
+                      <option value="Option 2">Not started</option>
+                      <option value="Option 3">Completed</option>
+                  </select>
+                </div>
 
-      <div class="bookSearch">
-        <label for="bookTitle">Search book</label>
-        <input class="u-full-width" type="text" placeholder="Book Author" id="searchInput">
-        <div class="searchResults" id="searchResults"></div>
-      </div>
-
-      <div class="library" id="library">
-        <div class="book">
-          <div class="title">One Piece Vol. 100</div>
+                <div class="row">
+                  <input class="button-primary" type="button" id="addBookSubmit" value="Add book">
+                </div>
+              </form>
+            </div>
         </div>
       </div>
-    </div>
-
-    <div class="modal">
-      <div class="modal-content">
-          <span class="close-button">&times;</span>
-
-          <div class="addBookForm">
-            <form>
-              <div class="row">
-                <div class="twelve columns">
-                  <label for="bookTitle">Title</label>
-                  <input class="u-full-width" type="text" placeholder="Book Title" id="bookTitle">
-              </div>
-
-              <div class="row">
-                <div class="twelve columns">
-                  <label for="bookTitle">Author</label>
-                  <input class="u-full-width" type="text" placeholder="Book Author" id="bookAuthor">
-              </div>
-
-              <div class="row">
-                <div class="twelve columns">
-                  <label for="bookTitle">Pages read</label>
-                  <input class="u-full-width" type="text" placeholder="Book Author" id="pagesRead">
-              </div>
-
-              <div>
-                <label for="bookTitle">Total pages</label>
-                <input class="u-full-width" type="text" placeholder="Book Author" id="totalPages">
-              </div>
-    
-              <div class="row">
-                <label for="bookStatus">Status</label>
-                  <select class="u-full-width" id="exampleRecipientInput">
-                    <option value="Option 1">Reading</option>
-                    <option value="Option 2">Not started</option>
-                    <option value="Option 3">Completed</option>
-                </select>
-              </div>
-
-              <div class="row">
-                <input class="button-primary" type="button" id="addBookSubmit" value="Add book">
-              </div>
-            </form>
-          </div>
       </div>
-    </div>
   </div>
 
 <!-- End Document
