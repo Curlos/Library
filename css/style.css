@@ -1,3 +1,7 @@
+html, body {
+    font-family: 
+}
+
 .modal {
     position: fixed;
     left: 0;
@@ -56,4 +60,18 @@
 
 button {
     margin-top: 10px;
+}
+
+.fa-plus-circle {
+    color: #33C3F0;
+}
+
+.fa-plus-circle:hover {
+    color: #2cb2db;
+    transition-duration: 0.5s;
+    transform: scale(1.2) rotate(180deg);
+}
+
+.fa-plus-circle:active {
+    transform: scaleX(5px);
 }
