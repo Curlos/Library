@@ -84,32 +84,29 @@
 
             <div class="addBookForm">
               <form>
-                <div class="row">
-                  <div class="twelve columns">
-                    <label for="bookTitle">Title</label>
-                    <input class="u-full-width" type="text" placeholder="Book Title" id="bookTitle">
-                </div>
-
-                <div class="row">
-                  <div class="twelve columns">
-                    <label for="bookTitle">Author</label>
-                    <input class="u-full-width" type="text" placeholder="Book Author" id="bookAuthor">
-                </div>
-
-                <div class="row">
-                  <div class="twelve columns">
-                    <label for="bookTitle">Pages read</label>
-                    <input class="u-full-width" type="text" placeholder="Book Author" id="pagesRead">
+                <div>
+                    <label for="bookTitleInput">Title</label>
+                    <input class="bookTitleInput" type="text" placeholder="Book title" id="bookTitleInput">
                 </div>
 
                 <div>
-                  <label for="bookTitle">Total pages</label>
-                  <input class="u-full-width" type="text" placeholder="Book Author" id="totalPages">
+                  <label for="bookAuthorInput">Author</label>
+                  <input class="bookAuthorInput" type="text" placeholder="Author" id="bookAuthorInput">
+                </div>
+
+                <div>
+                  <label for="pagesReadInput">Pages read:</label>
+                  <input class="pagesReadInput" type="text" placeholder="Pages read" id="pagesReadInput">
+                </div>
+
+                <div>
+                  <label for="pageCountInput">Page count: </label>
+                  <input class="pageCountInput" type="text" placeholder="Page count" id="pageCountInput">
                 </div>
       
-                <div class="row">
-                  <label for="bookStatus">Status</label>
-                    <select class="u-full-width" id="exampleRecipientInput">
+                <div>
+                  <label for="bookStatusInput">Status</label>
+                    <select class="bookStatusInput" id="exampleRecipientInput">
                       <option value="Option 1">Reading</option>
                       <option value="Option 2">Not started</option>
                       <option value="Option 3">Completed</option>
@@ -117,7 +114,7 @@
                 </div>
 
                 <div class="row">
-                  <input class="button-primary" type="button" id="addBookSubmit" value="Add book">
+                  <input class="addBookSubmit" type="button" id="addBookSubmit" value="Add book">
                 </div>
               </form>
             </div>
