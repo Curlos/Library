@@ -86,7 +86,7 @@ const addBookToLibraryFromSearch = (event) => {
     const [ title, author, pageCount ] = bookInfo
     const pagesRead = 0
 
-    const newBook = Book(title, author, pageCount, pagesRead, readStatus)
+    const newBook = Book(title, author, pageCount, pagesRead)
     const newBookHtml = createBookHtml(title, author, pageCount, pagesRead)
 
     libraryDiv.innerHTML += newBookHtml
