@@ -41,15 +41,7 @@
       </div>
 
       <div class="mainPage">
-        <input class="button-primary trigger" type="button" value="Search for books from public library"></br>
-
-        
-
-        <div class="bookSearch">
-          <label for="bookTitle">Search book</label>
-          <input class="u-full-width" type="text" placeholder="Book Author" id="searchInput">
-          <div class="searchResults" id="searchResults"></div>
-        </div>
+        <input class="button-primary trigger searchFromAPI" type="button" value="Search for books from public library"></br>
 
         <div class="library" id="library">
           <div class="book">
@@ -67,54 +59,56 @@
               </div>
             </div>
 
-            <div class="pagesRead">
-              <span class="minusPagesRead">-</span>
-              <span class="pagesReadNum">12000/12000</span>
-              <span class="plusPagesRead">+</span>
+            <span>Mark as read:</span>
+            <!-- Rounded switch -->
+            <div class="switchContainer">
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+              </label>
             </div>
           </div>
         </div>
       </div>
 
-      <i class="fas fa-plus-circle fa-5x trigger"></i>
+      <i class="fas fa-plus-circle fa-5x trigger addThroughForm"></i>
 
       <div class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
 
-            <div class="addBookForm">
+            <div class="bookSearchModal" hidden>
+              <span class="searchBookInputContainer">
+                <label for="bookTitle">Search book</label>
+                <input class="u-full-width" type="text" placeholder="Book Author" id="searchInput">
+              </span>
+              <div class="searchResults" id="searchResults"></div>
+            </div>
+
+            <div class="addBookFormModal" hidden>
               <form>
                 <div>
                     <label for="bookTitleInput">Title</label>
-                    <input class="bookTitleInput" type="text" placeholder="Book title" id="bookTitleInput">
+                    <input class="bookTitleInput" type="text" placeholder="Book title" id="bookTitleInput" required>
                 </div>
 
                 <div>
                   <label for="bookAuthorInput">Author</label>
-                  <input class="bookAuthorInput" type="text" placeholder="Author" id="bookAuthorInput">
+                  <input class="bookAuthorInput" type="text" placeholder="Author" id="bookAuthorInput" required>
                 </div>
 
                 <div>
                   <label for="pagesReadInput">Pages read:</label>
-                  <input class="pagesReadInput" type="text" placeholder="Pages read" id="pagesReadInput">
+                  <input class="pagesReadInput" type="number" placeholder="Pages read" id="pagesReadInput" required>
                 </div>
 
                 <div>
                   <label for="pageCountInput">Page count: </label>
-                  <input class="pageCountInput" type="text" placeholder="Page count" id="pageCountInput">
-                </div>
-      
-                <div>
-                  <label for="bookStatusInput">Status</label>
-                    <select class="bookStatusInput" id="exampleRecipientInput">
-                      <option value="Option 1">Reading</option>
-                      <option value="Option 2">Not started</option>
-                      <option value="Option 3">Completed</option>
-                  </select>
+                  <input class="pageCountInput" type="number" placeholder="Page count" id="pageCountInput" required>
                 </div>
 
                 <div class="row">
-                  <input class="addBookSubmit" type="button" id="addBookSubmit" value="Add book">
+                  <input class="addBookForm" type="submit" id="addBookForm" value="Add book">
                 </div>
               </form>
             </div>

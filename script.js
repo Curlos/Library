@@ -1,22 +1,29 @@
 const libraryDiv = document.getElementById('library')
 const addBookButton = document.getElementById('addBookSubmit')
+const addThroughForm = document.querySelector(".addThroughForm");
+const searchFromAPIButton = document.querySelector('.searchFromAPI')
+const bookSearchModal = document.querySelector('.bookSearchModal')
+const addBookFormModal = document.querySelector('.addBookFormModal')
 const searchInput = document.getElementById('searchInput')
 const searchResults = document.getElementById('searchResults');
+const addBookForm = document.getElementById('addBookForm')
+const readButtonSwitchContainer = document.querySelector('.switchContainer')
+const removeButton = document.querySelector('.remove')
+const editButton = document.querySelector('.edit')
 const API_KEY = 'AIzaSyAA44LXlUJizXoq017jBx9Q2eFdI1W6Kng'
 let myLibrary = []
 let searchText = ''
 
-const Book = (title, author, totalPages, pagesRead=0, readStatus='Not started') => {
+const Book = (title, author, pageCount, pagesRead=0) => {
     const getTitle = () => title
     const getAuthor = () => author
-    const getTotalPages = () => totalPages
+    const getPageCount = () => pageCount
     const getPagesRead = () => pagesRead
-    const getReadStatus = () => readStatus
 
-    return { getTitle, getAuthor, getTotalPages, getPagesRead, getReadStatus }
+    return { getTitle, getAuthor, getPageCount, getPagesRead }
 }
 
-const createBookHtml = (title, author, pageCount, pagesRead, readStatus) => {
+const createBookHtml = (title, author, pageCount, pagesRead) => {
     const bookHtml = `<div class="book">
         <div class="editBook">
             <span class="remove">Remove</span>
@@ -26,23 +33,44 @@ const createBookHtml = (title, author, pageCount, pagesRead, readStatus) => {
         <div class="bookInfo">
             <div class="bookInfoText">
                 <div class="title">${title}</div>
-                <div class="author">${author}</div>
-                <div class="pages">${pageCount} pages</div>
-                <div class="readStatus">${readStatus}</div>
+                <div class="author">By: ${author}</div>
+                <div class="pages">Pages read: ${pagesRead}/${pageCount}</div>
             </div>
         </div>
 
-        <div class="pagesRead">
-            <span class="minusPagesRead">-</span>
-            <span class="pagesReadNum">${pagesRead}/${pageCount}</span>
-            <span class="plusPagesRead">+</span>
+        <span>Mark as read:</span>
+        <div class="switchContainer">
+            <label class="switch">
+            <input type="checkbox">
+            <span class="slider round"></span>
+            </label>
         </div>
     </div>`
 
     return bookHtml
 }
 
-const addBookToLibrary = (event) => {
+const addBookThroughForm = () => {
+    const title = document.getElementById('bookTitleInput').value
+    const author = document.getElementById('bookAuthorInput').value
+    const pagesRead = document.getElementById('pagesReadInput').value
+    const pageCount = document.getElementById('pageCountInput').value
+
+    if (!title || !author || !pagesRead || pageCount) {
+
+    }
+    
+
+    const newBook = Book(title, author, pageCount, pagesRead, readStatus)
+    const newBookHtml = createBookHtml(title, author, pageCount, pagesRead, readStatus)
+
+    libraryDiv.innerHTML += newBookHtml
+
+    myLibrary.push(newBook)
+    toggleModal()
+}
+
+const addBookToLibraryFromSearch = (event) => {
     const bookElem = event.target
     console.log(bookElem.parentElement)
     const children = bookElem.parentElement.children
@@ -56,37 +84,15 @@ const addBookToLibrary = (event) => {
     }
 
     const [ title, author, pageCount ] = bookInfo
-    console.log(bookInfo)
-    console.log(title)
-    console.log(author)
-    console.log(Number(pageCount))
+    const pagesRead = 0
 
-    const bookHtml = `<div class="book">
-        <div class="editBook">
-            <span class="remove">Remove</span>
-            <span class="edit">Edit</span>
-        </div>
+    const newBook = Book(title, author, pageCount, pagesRead, readStatus)
+    const newBookHtml = createBookHtml(title, author, pageCount, pagesRead)
 
-        <div class="bookInfo">
-            <div class="bookInfoText">
-                <div class="title">One Piece Vol. 100</div>
-                <div class="author">Eiichiro Oda</div>
-                <div class="pages">200 pages</div>
-                <div class="readStatus">Finished reading</div>
-            </div>
-        </div>
+    libraryDiv.innerHTML += newBookHtml
 
-        <div class="pagesRead">
-            <span class="minusPagesRead">-</span>
-            <span class="completePagesRead">12000/12000</span>
-            <span class="plusPagesRead">+</span>
-        </div>
-    </div>`
-
-    // myLibrary.push(book)
-    // console.log(book)
-    // const bookDiv = document.createElement('div')
-    // bookDiv.classList.add('')
+    myLibrary.push(newBook)
+    toggleModal()
 }
 
 const deleteBookFromLibrary = (event) => {
@@ -132,7 +138,7 @@ const createBookElement = (book, index, buttonType) => {
         addBookButton.value = `book${index}`
         addBookButton.textContent = 'Add book'
         addBookButton.classList.add('button-primary')
-        addBookButton.addEventListener('click', addBookToLibrary)
+        addBookButton.addEventListener('click', addBookToLibraryFromSearch)
         bookButton = addBookButton
     } else if (buttonType == 'delete') {
         const deleteBookButton = document.createElement('button')
@@ -164,16 +170,33 @@ const createBookElement = (book, index, buttonType) => {
     searchResults.append(bookElem)
 }
 
-const modal = document.querySelector(".modal");
-const triggerElems = document.querySelectorAll(".trigger");
-const closeButton = document.querySelector(".close-button");
+const modal = document.querySelector(".modal")
+const closeButton = document.querySelector(".close-button")
 
 const toggleModal = () => {
-    modal.classList.toggle("show-modal");
+    modal.classList.toggle("show-modal")
+    bookSearchModal.style.display = "none"
+    addBookFormModal.style.display = "block"
 }
 
-const toggleModalAddBook = () => {
-    
+const toggleModalAPI = () => {
+    modal.classList.toggle("show-modal")
+    bookSearchModal.style.display = "block"
+    addBookFormModal.style.display = "none"
+}
+
+// Slider is firing event once and button another time so two times undos my effects
+const toggleRead = (event) => {
+    toggleReadClick += 1
+    const bookElem = event.target.parentElement.parentElement.parentElement
+    console.log(bookElem.classList)
+    console.log(bookElem.classList.contains('bookRead'))
+
+    if (bookElem.classList.contains('bookRead') && toggleReadClick % 2 != 0) {
+        bookElem.classList.add("bookRead")
+    } else {
+        bookElem.classList.remove("bookRead")
+    }
 }
 
 const windowOnClick = (event) => {
@@ -181,10 +204,14 @@ const windowOnClick = (event) => {
         toggleModal();
     }
 }
-searchInput.addEventListener('change', fetchFromAPI)
 
-for (let elem of triggerElems) {
-    elem.addEventListener("click", toggleModal);
-}
-closeButton.addEventListener("click", toggleModal);
-window.addEventListener("click", windowOnClick);
+let toggleReadClick = 0
+searchInput.addEventListener('change', fetchFromAPI)
+addThroughForm.addEventListener('click', toggleModal)
+searchFromAPIButton.addEventListener('click', toggleModalAPI)
+addBookForm.addEventListener('click', addBookThroughForm)
+readButtonSwitchContainer.addEventListener('dbclick', toggleRead)
+closeButton.addEventListener("click", toggleModal)
+removeButton.addEventListener('click', removeBook)
+editButton.addEventListener('click', editBook)
+window.addEventListener("click", windowOnClick)

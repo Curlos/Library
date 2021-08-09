@@ -128,13 +128,25 @@ button {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    --main-width: 200px;
-    width: 200px;
+    --main-width: 400px;
+    min-width: 400px;
     height: 300px;
     border-radius: 10px;
-    background-color: #4D908E;
+    background-color: gray;
     color: #ffffff;
     margin: 10px;
+}
+
+.book:hover {
+    background-color: rgb(100, 100, 100);
+}
+
+.bookRead {
+    background-color: #4D908E;
+}
+
+.bookRead:hover {
+    background-color: #3c706e;
 }
 
 .editBook {
@@ -178,42 +190,76 @@ button {
 
 .bookInfo {
     font-size: 20px;
+    max-width: 300px;
 }
 
 .bookInfoText {
     margin-bottom: 20px;
 }
 
-.minusPagesRead {
-    background-color: #F94144;
-    border: 2px solid #F94144;
-    padding: 5px;
-}
-
-.pagesReadNum {
-    border: 2px solid #ffffff;
-    padding: 5px;
-}
-
-.plusPagesRead {
-    background-color: #90BE6D;
-    border: 2px solid #90BE6D;
-    padding: 5px;
-}
-
-.minusPagesRead:hover {
-    background-color: #cf3739;
-}
-
-.pagesReadNum:hover {
-    background-color: #376968;
-}
-
-.book:hover {
-    transform: scale(1.1);
-    transition-duration: 0.6s;
-}
-
 .plusPagesRead:hover, .edit:hover, .remove:hover, .minusPagesRead:hover, .pagesReadNum:hover {
     cursor: pointer;
 }
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #90BE6D;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #90BE6D;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
