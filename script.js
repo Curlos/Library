@@ -11,7 +11,7 @@ const readButtonSwitchContainer = document.querySelector('.switchContainer')
 const removeButton = document.querySelector('.remove')
 const editButton = document.querySelector('.edit')
 const API_KEY = 'AIzaSyAA44LXlUJizXoq017jBx9Q2eFdI1W6Kng'
-const myLibrary = []
+let myLibrary = []
 let searchText = ''
 
 const uniqueId = () => {
@@ -32,7 +32,7 @@ const uniqueId = () => {
 const Book = (title, author, pageCount, pagesRead=0) => {
     const pagesReadNum = Number(pagesRead)
     const pageCountNum = Number(pageCount)
-    
+
     const getReadStatus = () => {
         if (pagesReadNum === 0) {
             return 'Not started'
@@ -58,7 +58,8 @@ const Book = (title, author, pageCount, pagesRead=0) => {
     }
 }
 
-const createBookHtml = (title, author, pageCount, pagesRead, readStatus) => {
+const createBookHtml = (bookObj) => {
+    const { id, title, author, pageCount, pagesRead, readStatus } = bookObj
     const book = document.createElement('div')
     book.classList.add('book')
 
@@ -68,10 +69,12 @@ const createBookHtml = (title, author, pageCount, pagesRead, readStatus) => {
     const remove = document.createElement('span')
     remove.classList.add('remove')
     remove.textContent = 'Remove'
+    remove.addEventListener('click', () => removeBook(bookObj))
 
     const edit = document.createElement('span')
     edit.classList.add('edit')
     edit.textContent = 'Edit'
+    edit.setAttribute('bookID', id)
 
     editBook.append(remove)
     editBook.append(edit)
@@ -141,7 +144,7 @@ const addBookThroughForm = (e) => {
     
 
     const newBook = Book(title, author, pageCount, pagesRead)
-    const newBookElem = createBookHtml(newBook.title, newBook.author, newBook.pageCount, newBook.pagesRead, newBook.readStatus)
+    const newBookElem = createBookHtml(newBook)
 
     libraryDiv.append(newBookElem)
 
@@ -166,7 +169,7 @@ const addBookToLibraryFromSearch = (event) => {
     const pagesRead = 0
 
     const newBook = Book(title, author, pageCount, pagesRead)
-    const newBookElem = createBookHtml(newBook.title, newBook.author, newBook.pageCount, newBook.pagesRead, newBook.readStatus)
+    const newBookElem = createBookHtml(newBook)
 
     libraryDiv.append(newBookElem)
 
@@ -174,9 +177,13 @@ const addBookToLibraryFromSearch = (event) => {
     toggleModal()
 }
 
-const removeBook = (event) => {
-    console.log(event)
-    console.log('removing...')
+const removeBook = (book) => {
+    console.log(book)
+    console.log(`Removing book ${book.title} ${book.id}`)
+
+    myLibrary = myLibrary.filter(libraryBook => libraryBook.id !== book.id)
+
+    resetPage()
 }
 
 const editBook = (event) => {
@@ -282,6 +289,17 @@ const toggleRead = (event) => {
     }
 }
 
+const resetPage = () => {
+    libraryDiv.innerHTML = ''
+
+    console.log(myLibrary)
+
+    myLibrary.forEach((book) => {
+        const bookElem = createBookHtml(book)
+        libraryDiv.append(bookElem)
+    })
+}
+
 const windowOnClick = (event) => {
     if (event.target === modal) {
         toggleModal();
@@ -293,8 +311,5 @@ searchInput.addEventListener('change', fetchFromAPI)
 addThroughForm.addEventListener('click', toggleModal)
 searchFromAPIButton.addEventListener('click', toggleModalAPI)
 addBookForm.addEventListener('click', addBookThroughForm)
-readButtonSwitchContainer.addEventListener('dbclick', toggleRead)
 closeButton.addEventListener("click", toggleModal)
-removeButton.addEventListener('click', removeBook)
-editButton.addEventListener('click', editBook)
 window.addEventListener("click", windowOnClick)
