@@ -14,43 +14,129 @@ const API_KEY = 'AIzaSyAA44LXlUJizXoq017jBx9Q2eFdI1W6Kng'
 let myLibrary = []
 let searchText = ''
 
+const uniqueId = () => {
+    // desired length of Id
+    var idStrLen = 32;
+    // always start with a letter -- base 36 makes for a nice shortcut
+    var idStr = (Math.floor((Math.random() * 25)) + 10).toString(36) + "_";
+    // add a timestamp in milliseconds (base 36 again) as the base
+    idStr += (new Date()).getTime().toString(36) + "_";
+    // similar to above, complete the Id using random, alphanumeric characters
+    do {
+        idStr += (Math.floor((Math.random() * 35))).toString(36);
+    } while (idStr.length < idStrLen);
+
+    return (idStr);
+}
+
+console.log(uniqueId())
+
 const Book = (title, author, pageCount, pagesRead=0) => {
+    const getId = () => uniqueId()
     const getTitle = () => title
     const getAuthor = () => author
-    const getPageCount = () => pageCount
-    const getPagesRead = () => pagesRead
+    const getPageCount = () => Number(pageCount)
+    const getPagesRead = () => Number(pagesRead)
+    const getReadStatus = () => {
+        if (getPagesRead() === 0) {
+            return 'Not started'
+        }
+        
+        if (getPagesRead() < getPageCount()) {
+            return 'Currently reading'
+        }
 
-    return { getTitle, getAuthor, getPageCount, getPagesRead }
+        if (getPagesRead() === getPageCount()) {
+            return 'Finished reading'
+        }
+    }
+
+    const getBook = () => {
+        return { 
+            id: getId(),
+            title: getTitle(),
+            author: getAuthor(),
+            pageCount: getPageCount(),
+            pagesRead: getPagesRead(),
+            readStatus: getReadStatus()
+        }
+    }
+
+    return { getId, getTitle, getAuthor, getPageCount, getPagesRead, getReadStatus, getBook }
 }
 
-const createBookHtml = (title, author, pageCount, pagesRead) => {
-    const bookHtml = `<div class="book">
-        <div class="editBook">
-            <span class="remove">Remove</span>
-            <span class="edit">Edit</span>
-        </div>
+const createBookHtml = (title, author, pageCount, pagesRead, readStatus) => {
+    const book = document.createElement('div')
+    book.classList.add('book')
 
-        <div class="bookInfo">
-            <div class="bookInfoText">
-                <div class="title">${title}</div>
-                <div class="author">By: ${author}</div>
-                <div class="pages">Pages read: ${pagesRead}/${pageCount}</div>
-            </div>
-        </div>
+    const editBook = document.createElement('div')
+    editBook.classList.add('editBook')
 
-        <span>Mark as read:</span>
-        <div class="switchContainer">
-            <label class="switch">
-            <input type="checkbox">
-            <span class="slider round"></span>
-            </label>
-        </div>
-    </div>`
+    const remove = document.createElement('span')
+    remove.classList.add('remove')
+    remove.textContent = 'Remove'
 
-    return bookHtml
+    const edit = document.createElement('span')
+    edit.classList.add('edit')
+    edit.textContent = 'Edit'
+
+    editBook.append(remove)
+    editBook.append(edit)
+
+    const bookInfo = document.createElement('div')
+    bookInfo.classList.add('bookInfo')
+
+    const bookInfoText = document.createElement('div')
+    bookInfoText.classList.add('bookInfoText')
+
+    const titleDiv = document.createElement('div')
+    titleDiv.classList.add('title')
+    titleDiv.textContent = title
+
+    const authorDiv = document.createElement('div')
+    authorDiv.classList.add('author')
+    authorDiv.textContent = author
+
+    const pagesDiv = document.createElement('div')
+    pagesDiv.classList.add('pages')
+    pagesDiv.textContent = `Pages read: ${pagesRead}/${pageCount}`
+
+    const readStatusDiv = document.createElement('div')
+    readStatusDiv.classList.add('readStatus')
+    readStatusDiv.textContent = readStatus
+
+    bookInfoText.append(titleDiv, authorDiv, pagesDiv, readStatusDiv)
+    bookInfo.append(bookInfoText)
+
+    const markAsReadSpan = document.createElement('span')
+    markAsReadSpan.textContent = 'Mark as read:'
+
+    const switchContainer = document.createElement('div')
+    switchContainer.classList.add('switchContainer')
+
+    const switchLabel = document.createElement('label')
+    switchLabel.classList.add('switch')
+
+    const checkboxInput = document.createElement('input')
+    checkboxInput.setAttribute('type', 'checkbox')
+
+    const sliderRound = document.createElement('span')
+    sliderRound.classList.add('slider', 'round')
+
+    switchLabel.append(checkboxInput, sliderRound)
+    switchContainer.append(switchLabel)
+
+
+    book.append(editBook)
+    book.append(bookInfo)
+    book.append(markAsReadSpan)
+    book.append(switchContainer)
+
+    return book
 }
 
-const addBookThroughForm = () => {
+const addBookThroughForm = (e) => {
+    e.preventDefault()
     const title = document.getElementById('bookTitleInput').value
     const author = document.getElementById('bookAuthorInput').value
     const pagesRead = document.getElementById('pagesReadInput').value
@@ -61,12 +147,15 @@ const addBookThroughForm = () => {
     }
     
 
-    const newBook = Book(title, author, pageCount, pagesRead, readStatus)
-    const newBookHtml = createBookHtml(title, author, pageCount, pagesRead, readStatus)
+    const newBook = Book(title, author, pageCount, pagesRead)
+    const newBookObj = newBook.getBook()
+    const newBookElem = createBookHtml(newBookObj.title, newBookObj.author, newBookObj.pageCount, newBookObj.pagesRead, newBookObj.readStatus)
 
-    libraryDiv.innerHTML += newBookHtml
+    libraryDiv.append(newBookElem)
 
     myLibrary.push(newBook)
+    console.log(newBook.getBook())
+    console.log(myLibrary)
     toggleModal()
 }
 
@@ -87,16 +176,21 @@ const addBookToLibraryFromSearch = (event) => {
     const pagesRead = 0
 
     const newBook = Book(title, author, pageCount, pagesRead)
-    const newBookHtml = createBookHtml(title, author, pageCount, pagesRead)
+    const newBookObj = newBook.getBook()
+    const newBookElem = createBookHtml(newBookObj.title, newBookObj.author, newBookObj.pageCount, newBookObj.pagesRead, newBookObj.readStatus)
 
-    libraryDiv.innerHTML += newBookHtml
+    libraryDiv.append(newBookElem)
 
     myLibrary.push(newBook)
     toggleModal()
 }
 
-const deleteBookFromLibrary = (event) => {
-    console.log(event.target.value)
+const removeBook = (event) => {
+    console.log(event)
+}
+
+const editBook = (event) => {
+
 }
 
 const fetchFromAPI = async (event) => {
