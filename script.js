@@ -11,7 +11,65 @@ const readButtonSwitchContainer = document.querySelector('.switchContainer')
 const removeButton = document.querySelector('.remove')
 const editButton = document.querySelector('.edit')
 const API_KEY = 'AIzaSyAA44LXlUJizXoq017jBx9Q2eFdI1W6Kng'
-let myLibrary = []
+let myLibrary = [
+    {
+        id: "c_ktt512pj_gf5n5mk7kecdgm4xuhkps",
+        title: "One Piece, Vol. 1",
+        author: "Eiichiro Oda",
+        pageCount: 210,
+        pagesRead: 0,
+        readStatus: "Not started",
+    },
+    {
+        id: "v_ktt518ls_vo2u8mqmciken90fwk99l",
+        title: "One Piece Box Set 4",
+        author: "Eiichiro Oda",
+        pageCount: 4328,
+        pagesRead: 0,
+        readStatus: "Not started",
+    },
+    {
+        id: "w_ktt51fkn_qeen03q7m4ycwiq5mv99v",
+        title: "Shoe Dog",
+        author: "Phil Knight",
+        pageCount: 400,
+        pagesRead: 0,
+        readStatus: "Not started",
+    },
+    {
+        id: "o_ktt51jta_gqx7ldqnohicfbs84lufo",
+        title: "Atomic Habits",
+        author: "James Clear",
+        pageCount: 306,
+        pagesRead: 0,
+        readStatus: "Not started",
+    },
+    {
+        id: "a_ktt51u7u_bvmh9ei6pqsf8lhiy0flb",
+        title: "Creativity, Inc.",
+        author: "Ed Catmull",
+        pageCount: 368,
+        pagesRead: 0,
+        readStatus: "Not started",
+    },
+    {
+        id: "d_ktt52f13_xqb2u5h7odlxennphwak8",
+        title: "Demon Slayer",
+        author: "Koyoharu Gotouge",
+        pageCount: 192,
+        pagesRead: 0,
+        readStatus: "Not started",
+    },
+    {
+        id: "v_ktt52oo3_1uu9gqy1ftnoa9wh589ju",
+        title: "Demon Slayer",
+        author: "Koyoharu Gotouge",
+        pageCount: 232,
+        pagesRead: 0,
+        readStatus: "Not started",
+    },
+]
+
 let searchText = ''
 
 const uniqueId = () => {
@@ -46,7 +104,7 @@ const Book = (title, author, pageCount, pagesRead=0) => {
             return 'Finished reading'
         }
     }
-    console.log(myLibrary)
+    console.log(JSON.stringify(myLibrary))
 
     return { 
         id: uniqueId(),
@@ -305,6 +363,8 @@ const windowOnClick = (event) => {
         toggleModal();
     }
 }
+
+resetPage()
 
 let toggleReadClick = 0
 searchInput.addEventListener('change', fetchFromAPI)
