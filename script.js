@@ -11,7 +11,7 @@ const readButtonSwitchContainer = document.querySelector('.switchContainer')
 const removeButton = document.querySelector('.remove')
 const editButton = document.querySelector('.edit')
 const API_KEY = 'AIzaSyAA44LXlUJizXoq017jBx9Q2eFdI1W6Kng'
-let myLibrary = []
+const myLibrary = []
 let searchText = ''
 
 const uniqueId = () => {
@@ -29,40 +29,33 @@ const uniqueId = () => {
     return (idStr);
 }
 
-console.log(uniqueId())
-
 const Book = (title, author, pageCount, pagesRead=0) => {
-    const getId = () => uniqueId()
-    const getTitle = () => title
-    const getAuthor = () => author
-    const getPageCount = () => Number(pageCount)
-    const getPagesRead = () => Number(pagesRead)
+    const pagesReadNum = Number(pagesRead)
+    const pageCountNum = Number(pageCount)
+    
     const getReadStatus = () => {
-        if (getPagesRead() === 0) {
+        if (pagesReadNum === 0) {
             return 'Not started'
         }
         
-        if (getPagesRead() < getPageCount()) {
+        if (pagesReadNum < pageCountNum) {
             return 'Currently reading'
         }
 
-        if (getPagesRead() === getPageCount()) {
+        if (pagesReadNum === pageCountNum) {
             return 'Finished reading'
         }
     }
+    console.log(myLibrary)
 
-    const getBook = () => {
-        return { 
-            id: getId(),
-            title: getTitle(),
-            author: getAuthor(),
-            pageCount: getPageCount(),
-            pagesRead: getPagesRead(),
-            readStatus: getReadStatus()
-        }
+    return { 
+        id: uniqueId(),
+        title: title,
+        author: author,
+        pageCount: Number(pageCount),
+        pagesRead: Number(pagesRead),
+        readStatus: getReadStatus()
     }
-
-    return { getId, getTitle, getAuthor, getPageCount, getPagesRead, getReadStatus, getBook }
 }
 
 const createBookHtml = (title, author, pageCount, pagesRead, readStatus) => {
@@ -148,20 +141,17 @@ const addBookThroughForm = (e) => {
     
 
     const newBook = Book(title, author, pageCount, pagesRead)
-    const newBookObj = newBook.getBook()
-    const newBookElem = createBookHtml(newBookObj.title, newBookObj.author, newBookObj.pageCount, newBookObj.pagesRead, newBookObj.readStatus)
+    const newBookElem = createBookHtml(newBook.title, newBook.author, newBook.pageCount, newBook.pagesRead, newBook.readStatus)
 
     libraryDiv.append(newBookElem)
 
     myLibrary.push(newBook)
-    console.log(newBook.getBook())
     console.log(myLibrary)
     toggleModal()
 }
 
 const addBookToLibraryFromSearch = (event) => {
     const bookElem = event.target
-    console.log(bookElem.parentElement)
     const children = bookElem.parentElement.children
     const keys = Object.keys(bookElem.parentElement.children)
     const bookInfo = []
@@ -176,8 +166,7 @@ const addBookToLibraryFromSearch = (event) => {
     const pagesRead = 0
 
     const newBook = Book(title, author, pageCount, pagesRead)
-    const newBookObj = newBook.getBook()
-    const newBookElem = createBookHtml(newBookObj.title, newBookObj.author, newBookObj.pageCount, newBookObj.pagesRead, newBookObj.readStatus)
+    const newBookElem = createBookHtml(newBook.title, newBook.author, newBook.pageCount, newBook.pagesRead, newBook.readStatus)
 
     libraryDiv.append(newBookElem)
 
@@ -187,6 +176,7 @@ const addBookToLibraryFromSearch = (event) => {
 
 const removeBook = (event) => {
     console.log(event)
+    console.log('removing...')
 }
 
 const editBook = (event) => {
@@ -199,7 +189,6 @@ const fetchFromAPI = async (event) => {
     const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchText}&key=${API_KEY}`)
     const data = await response.json()
     const books = data.items
-    console.log(data)
     displaySearchResults(books)
 }
 
