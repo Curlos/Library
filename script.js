@@ -13,16 +13,68 @@ const removeButton = document.querySelector('.remove')
 const editButton = document.querySelector('.edit')
 const API_KEY = 'AIzaSyAA44LXlUJizXoq017jBx9Q2eFdI1W6Kng'
 let myLibrary = [
-    {
-        id: "o_ktt51jta_gqx7ldqnohicfbs84lufo",
-        title: "Atomic Habits",
-        author: "James Clear",
-        pageCount: 306,
-        pagesRead: 0,
-        readStatus: "Not started",
-        imgSrc: 'https://books.google.com/books/content?id=XfFvDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api'
-    },
-]
+	{
+		id: "e_ktu1nzmd_gt35kc7qfs5wp9jp4n1ac",
+		title: "One Piece, Vol. 98",
+		author: "Eiichiro Oda",
+		pageCount: "200",
+		pagesRead: 188,
+		readStatus: "Currently reading",
+		imgSrc:
+			"http://books.google.com/books/content?id=kX45zgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+		backgroundColor: "gray",
+	},
+	{
+		id: "u_ktu1ofrm_ist1yoypi018vjso6q35p",
+		title: "The Mamba Mentality",
+		author: "Kobe Bryant",
+		pageCount: 208,
+		pagesRead: 208,
+		readStatus: "Finished reading",
+		imgSrc:
+			"http://books.google.com/books/content?id=lqRdDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+		backgroundColor: "#53e664",
+	},
+	{
+		id: "b_ktu1oomz_r9drm7sw9og9voikdbxi7",
+		title: "Your Next Five Moves",
+		author: "Patrick Bet-David",
+		pageCount: 320,
+		pagesRead: 320,
+		readStatus: "Finished reading",
+		imgSrc:
+			"http://books.google.com/books/content?id=bfj1DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+		backgroundColor: "#53e664",
+	},
+	{
+		id: "x_ktu1otnx_3tpookwmmowwullnlfhrm",
+		title: "Atomic Habits",
+		author: "James Clear",
+		pageCount: 306,
+		pagesRead: 306,
+		readStatus: "Finished reading",
+		imgSrc:
+			"http://books.google.com/books/content?id=XfFvDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+		backgroundColor: "#53e664",
+	},
+	{
+		id: "f_ktu1p73d_pimadwr20n9s6ytv522vi",
+		title: "Jujutsu Kaisen, Vol. 4",
+		author: "Gege Akutami",
+		pageCount: "199",
+		pagesRead: 0,
+		readStatus: "Not started",
+		imgSrc:
+			"http://books.google.com/books/content?id=b93lDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+		backgroundColor: "gray",
+	},
+];
+
+
+if (window.localStorage.getItem('library')) {
+    myLibrary = JSON.parse(window.localStorage.getItem('library'))
+}
+
 
 let searchText = ''
 
@@ -45,20 +97,6 @@ const Book = (title, author, pageCount, pagesRead=0, imgSrc) => {
     let pagesReadNum = Number(pagesRead)
     let pageCountNum = Number(pageCount)
 
-    const getReadStatus = () => {
-        if (pagesReadNum === 0) {
-            return 'Not started'
-        }
-        
-        if (pagesReadNum < pageCountNum) {
-            return 'Currently reading'
-        }
-
-        if (pagesReadNum === pageCountNum) {
-            return 'Finished reading'
-        }
-    }
-
     if (pagesReadNum > pageCountNum) {
         pagesReadNum = pageCountNum
     }
@@ -69,15 +107,15 @@ const Book = (title, author, pageCount, pagesRead=0, imgSrc) => {
         author: author,
         pageCount: pageCountNum,
         pagesRead: pagesReadNum,
-        readStatus: getReadStatus(),
-        imgSrc: imgSrc || 'http://books.google.com/books/content?id=crFcWYcDuHoC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api'
+        readStatus: getReadStatus(pagesReadNum, pageCountNum),
+        imgSrc: imgSrc || 'http://books.google.com/books/content?id=crFcWYcDuHoC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+        backgroundColor: 'gray'
     }
 }
 
 const createBookHtml = (bookObj) => {
-    const { id, title, author, pageCount, pagesRead, readStatus, imgSrc } = bookObj
+    const { id, title, author, pageCount, pagesRead, readStatus, imgSrc, backgroundColor } = bookObj
 
-    console.log(bookObj)
     const book = document.createElement('div')
     book.classList.add('book')
 
@@ -137,11 +175,13 @@ const createBookHtml = (bookObj) => {
 
     const checkboxInput = document.createElement('input')
     checkboxInput.setAttribute('type', 'checkbox')
+    checkboxInput.checked = bookObj.backgroundColor === 'gray' ? false : true
 
-    const sliderRound = document.createElement('span')
-    sliderRound.classList.add('slider', 'round')
+    checkboxInput.addEventListener('click', () => {
+        toggleSlider(id)
+    })
 
-    switchLabel.append(checkboxInput, sliderRound)
+    switchLabel.append(checkboxInput)
     switchContainer.append(switchLabel)
 
 
@@ -150,7 +190,39 @@ const createBookHtml = (bookObj) => {
     book.append(markAsReadSpan)
     book.append(switchContainer)
 
+    book.style.backgroundColor = backgroundColor || 'gray'
+
     return book
+}
+
+const toggleSlider = (id) => {
+    const foundBook = myLibrary.find(book => book.id === id)
+
+    if (foundBook.backgroundColor === 'gray') {
+        // If the book was not read
+        foundBook.pagesRead = foundBook.pageCount
+        foundBook.readStatus = getReadStatus(foundBook.pagesRead, foundBook.pageCount)
+        foundBook.backgroundColor = '#53e664'
+    } else {
+        // If the book was already read
+        foundBook.backgroundColor = 'gray'
+    }
+
+    resetPage()
+}
+
+const getReadStatus = (pagesReadNum, pageCountNum) => {
+    if (pagesReadNum === 0) {
+        return 'Not started'
+    }
+    
+    if (pagesReadNum < pageCountNum) {
+        return 'Currently reading'
+    }
+
+    if (pagesReadNum === pageCountNum) {
+        return 'Finished reading'
+    }
 }
 
 const addBookThroughForm = (e) => {
@@ -172,6 +244,8 @@ const addBookThroughForm = (e) => {
     libraryDiv.append(newBookElem)
     myLibrary.push(newBook)
 
+    window.localStorage.setItem('library', JSON.stringify(myLibrary))
+
     toggleModal()
 }
 
@@ -187,15 +261,13 @@ const addBookToLibraryFromSearch = (bookInfo) => {
     libraryDiv.append(newBookElem)
 
     myLibrary.push(newBook)
+    window.localStorage.setItem('library', JSON.stringify(myLibrary))
     toggleModal()
 }
 
 const removeBook = (book) => {
-    console.log(book)
-    console.log(`Removing book ${book.title} ${book.id}`)
-
     myLibrary = myLibrary.filter(libraryBook => libraryBook.id !== book.id)
-
+    window.localStorage.setItem('library', JSON.stringify(myLibrary))
     resetPage()
 }
 
@@ -232,19 +304,22 @@ const editBookThroughForm = (e) => {
         return false
     }
 
-    console.log(bookID)
+    const pagesReadNum = Number(pagesRead.value)
+    const pagesCountNum = Number(pageCount.value)
 
     const bookToEdit = myLibrary.find(book => book.id === bookID)
     bookToEdit.title = title.value
     bookToEdit.author = author.value
-    bookToEdit.pagesRead = Number(pagesRead.value) > Number(pageCount.value) ? Number(pageCount.value) : Number(pagesRead.value)
+    bookToEdit.pagesRead = pagesReadNum > pagesCountNum ? pagesCountNum : pagesReadNum
     bookToEdit.pageCount = pageCount.value
     bookToEdit.imgSrc = bookCoverLink.value
+    bookToEdit.readStatus = getReadStatus(pagesReadNum, pagesCountNum)
+
 
     addBookForm.style.display = 'block'
     editBookForm.style.display = 'none'
 
-    console.log(editBookForm)
+    window.localStorage.setItem('library', JSON.stringify(myLibrary))
 
     toggleModal()
     resetPage()
@@ -264,7 +339,6 @@ const displaySearchResults = (books) => {
     let index = 0
     for (let book of books) {
         if (book.volumeInfo.imageLinks) {
-            console.log(book.volumeInfo.imageLinks.thumbnail)
             createBookElement(book.volumeInfo, index, 'add')
         } else {
             createBookElement(book.volumeInfo, index, 'add')
@@ -310,7 +384,7 @@ const createBookElement = (book, index, buttonType) => {
     linkElem.setAttribute('href', book.canonicalVolumeLink)
     linkElem.setAttribute('target', '_blank')
     imgElem.src = book.imageLinks.thumbnail
-    imgElem.classList.add('bookCover')
+    imgElem.classList.add('bookImage')
     titleElem.textContent = 'Title: ' + (book.title != undefined ? book.title : 'Unknown')
     authorElem.textContent = 'Author: ' + (book.authors != undefined ? book.authors[0] : 'Unknown')
     ratingsElem.textContent = 'Rating: ' + (book.averageRating != undefined ? book.averageRating : 'Unknown')
@@ -358,24 +432,8 @@ const toggleModalAPI = () => {
     addBookFormModal.style.display = "none"
 }
 
-// Slider is firing event once and button another time so two times undos my effects
-const toggleRead = (event) => {
-    toggleReadClick += 1
-    const bookElem = event.target.parentElement.parentElement.parentElement
-    console.log(bookElem.classList)
-    console.log(bookElem.classList.contains('bookRead'))
-
-    if (bookElem.classList.contains('bookRead') && toggleReadClick % 2 != 0) {
-        bookElem.classList.add("bookRead")
-    } else {
-        bookElem.classList.remove("bookRead")
-    }
-}
-
 const resetPage = () => {
     libraryDiv.innerHTML = ''
-
-    console.log(myLibrary)
 
     myLibrary.forEach((book) => {
         const bookElem = createBookHtml(book)

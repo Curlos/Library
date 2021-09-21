@@ -99,11 +99,11 @@ button {
     margin-top: 10px;
 }
 
+.addThroughFormContainer {
+    float: right;
+}
+
 .fa-plus-circle {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    text-align: right;
     margin: 30px;
     color: #277DA1;
 }
@@ -132,13 +132,8 @@ button {
     min-height: 500px;
     height: 300px;
     border-radius: 10px;
-    background-color: gray;
     color: #ffffff;
     margin: 10px;
-}
-
-.book:hover {
-    background-color: rgb(100, 100, 100);
 }
 
 .bookRead {
@@ -205,69 +200,6 @@ button {
     cursor: pointer;
 }
 
-/* The switch - the box around the slider */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-  
-  /* Hide default HTML checkbox */
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  /* The slider */
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-input:checked + .slider {
-background-color: #90BE6D;
-}
-
-input:focus + .slider {
-box-shadow: 0 0 1px #90BE6D;
-}
-
-input:checked + .slider:before {
--webkit-transform: translateX(26px);
--ms-transform: translateX(26px);
-transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-border-radius: 34px;
-}
-
-.slider.round:before {
-border-radius: 50%;
-}
-
 .searchFromAPI {
     margin-left: 10px;
     border: none;
@@ -281,4 +213,22 @@ border-radius: 50%;
 
 .headerLink {
     font-size: 35px;
+}
+
+.modal input {
+    border: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: #dbdbdb;
+  padding: 6px;
+  border-radius: 8px;
+  min-width: 250px;
+  font-size: 14px;
+  margin: 6px;
+}
+
+.modal input:focus {
+    outline: none;
 }
