@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Gentium+Book+Basic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 html, body {
-    font-family: Gentium Book Basic, sans-serif;
+    font-family: Montserrat, sans-serif;
     margin: 0;
 }
 
@@ -128,8 +128,8 @@ button {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    --main-width: 400px;
-    min-width: 400px;
+    min-width: 250px;
+    min-height: 500px;
     height: 300px;
     border-radius: 10px;
     background-color: gray;
@@ -147,6 +147,10 @@ button {
 
 .bookRead:hover {
     background-color: #3c706e;
+}
+
+.bookImage {
+    height: 200px;
 }
 
 .editBook {
@@ -241,25 +245,40 @@ button {
     transition: .4s;
   }
   
-  input:checked + .slider {
-    background-color: #90BE6D;
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #90BE6D;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-  
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;
-  }
+input:checked + .slider {
+background-color: #90BE6D;
+}
+
+input:focus + .slider {
+box-shadow: 0 0 1px #90BE6D;
+}
+
+input:checked + .slider:before {
+-webkit-transform: translateX(26px);
+-ms-transform: translateX(26px);
+transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+border-radius: 34px;
+}
+
+.slider.round:before {
+border-radius: 50%;
+}
+
+.searchFromAPI {
+    margin-left: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #0371a8;
+    color: white;
+    font-family: Montserrat, sans-serif;
+    font-size: 15px;
+    padding: 15px;
+}
+
+.headerLink {
+    font-size: 35px;
+}

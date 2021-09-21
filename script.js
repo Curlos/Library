@@ -7,35 +7,12 @@ const addBookFormModal = document.querySelector('.addBookFormModal')
 const searchInput = document.getElementById('searchInput')
 const searchResults = document.getElementById('searchResults');
 const addBookForm = document.getElementById('addBookForm')
+const editBookForm = document.getElementById('editBookForm')
 const readButtonSwitchContainer = document.querySelector('.switchContainer')
 const removeButton = document.querySelector('.remove')
 const editButton = document.querySelector('.edit')
 const API_KEY = 'AIzaSyAA44LXlUJizXoq017jBx9Q2eFdI1W6Kng'
 let myLibrary = [
-    {
-        id: "c_ktt512pj_gf5n5mk7kecdgm4xuhkps",
-        title: "One Piece, Vol. 1",
-        author: "Eiichiro Oda",
-        pageCount: 210,
-        pagesRead: 0,
-        readStatus: "Not started",
-    },
-    {
-        id: "v_ktt518ls_vo2u8mqmciken90fwk99l",
-        title: "One Piece Box Set 4",
-        author: "Eiichiro Oda",
-        pageCount: 4328,
-        pagesRead: 0,
-        readStatus: "Not started",
-    },
-    {
-        id: "w_ktt51fkn_qeen03q7m4ycwiq5mv99v",
-        title: "Shoe Dog",
-        author: "Phil Knight",
-        pageCount: 400,
-        pagesRead: 0,
-        readStatus: "Not started",
-    },
     {
         id: "o_ktt51jta_gqx7ldqnohicfbs84lufo",
         title: "Atomic Habits",
@@ -43,30 +20,7 @@ let myLibrary = [
         pageCount: 306,
         pagesRead: 0,
         readStatus: "Not started",
-    },
-    {
-        id: "a_ktt51u7u_bvmh9ei6pqsf8lhiy0flb",
-        title: "Creativity, Inc.",
-        author: "Ed Catmull",
-        pageCount: 368,
-        pagesRead: 0,
-        readStatus: "Not started",
-    },
-    {
-        id: "d_ktt52f13_xqb2u5h7odlxennphwak8",
-        title: "Demon Slayer",
-        author: "Koyoharu Gotouge",
-        pageCount: 192,
-        pagesRead: 0,
-        readStatus: "Not started",
-    },
-    {
-        id: "v_ktt52oo3_1uu9gqy1ftnoa9wh589ju",
-        title: "Demon Slayer",
-        author: "Koyoharu Gotouge",
-        pageCount: 232,
-        pagesRead: 0,
-        readStatus: "Not started",
+        imgSrc: 'https://books.google.com/books/content?id=XfFvDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api'
     },
 ]
 
@@ -87,9 +41,9 @@ const uniqueId = () => {
     return (idStr);
 }
 
-const Book = (title, author, pageCount, pagesRead=0) => {
-    const pagesReadNum = Number(pagesRead)
-    const pageCountNum = Number(pageCount)
+const Book = (title, author, pageCount, pagesRead=0, imgSrc) => {
+    let pagesReadNum = Number(pagesRead)
+    let pageCountNum = Number(pageCount)
 
     const getReadStatus = () => {
         if (pagesReadNum === 0) {
@@ -104,20 +58,26 @@ const Book = (title, author, pageCount, pagesRead=0) => {
             return 'Finished reading'
         }
     }
-    console.log(JSON.stringify(myLibrary))
+
+    if (pagesReadNum > pageCountNum) {
+        pagesReadNum = pageCountNum
+    }
 
     return { 
         id: uniqueId(),
         title: title,
         author: author,
-        pageCount: Number(pageCount),
-        pagesRead: Number(pagesRead),
-        readStatus: getReadStatus()
+        pageCount: pageCountNum,
+        pagesRead: pagesReadNum,
+        readStatus: getReadStatus(),
+        imgSrc: imgSrc || 'http://books.google.com/books/content?id=crFcWYcDuHoC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api'
     }
 }
 
 const createBookHtml = (bookObj) => {
-    const { id, title, author, pageCount, pagesRead, readStatus } = bookObj
+    const { id, title, author, pageCount, pagesRead, readStatus, imgSrc } = bookObj
+
+    console.log(bookObj)
     const book = document.createElement('div')
     book.classList.add('book')
 
@@ -132,13 +92,17 @@ const createBookHtml = (bookObj) => {
     const edit = document.createElement('span')
     edit.classList.add('edit')
     edit.textContent = 'Edit'
-    edit.setAttribute('bookID', id)
+    edit.addEventListener('click', () => editBookObj(bookObj))
 
     editBook.append(remove)
     editBook.append(edit)
 
     const bookInfo = document.createElement('div')
     bookInfo.classList.add('bookInfo')
+
+    const bookImage = document.createElement('img')
+    bookImage.classList.add('bookImage')
+    bookImage.src = imgSrc
 
     const bookInfoText = document.createElement('div')
     bookInfoText.classList.add('bookInfoText')
@@ -160,7 +124,7 @@ const createBookHtml = (bookObj) => {
     readStatusDiv.textContent = readStatus
 
     bookInfoText.append(titleDiv, authorDiv, pagesDiv, readStatusDiv)
-    bookInfo.append(bookInfoText)
+    bookInfo.append(bookImage, bookInfoText)
 
     const markAsReadSpan = document.createElement('span')
     markAsReadSpan.textContent = 'Mark as read:'
@@ -191,42 +155,33 @@ const createBookHtml = (bookObj) => {
 
 const addBookThroughForm = (e) => {
     e.preventDefault()
-    const title = document.getElementById('bookTitleInput').value
-    const author = document.getElementById('bookAuthorInput').value
-    const pagesRead = document.getElementById('pagesReadInput').value
-    const pageCount = document.getElementById('pageCountInput').value
+    const title = document.getElementById('bookTitleInput')
+    const author = document.getElementById('bookAuthorInput')
+    const pagesRead = document.getElementById('pagesReadInput')
+    const pageCount = document.getElementById('pageCountInput')
+    const bookCoverLink = document.getElementById('bookCoverLink')
 
-    if (!title || !author || !pagesRead || pageCount) {
-
+    if (!title.value || !author.value || !pagesRead.value || !pageCount.value) {
+        return false
     }
     
 
-    const newBook = Book(title, author, pageCount, pagesRead)
+    const newBook = Book(title.value, author.value, pageCount.value, pagesRead.value, bookCoverLink.value)
     const newBookElem = createBookHtml(newBook)
 
     libraryDiv.append(newBookElem)
-
     myLibrary.push(newBook)
-    console.log(myLibrary)
+
     toggleModal()
 }
 
-const addBookToLibraryFromSearch = (event) => {
-    const bookElem = event.target
-    const children = bookElem.parentElement.children
-    const keys = Object.keys(bookElem.parentElement.children)
-    const bookInfo = []
+const addBookToLibraryFromSearch = (bookInfo) => {
 
-    for (let i = 1; i < keys.length - 1; i++) {
-        if (i != 3) {
-            bookInfo.push(children[keys[i]].textContent.split(':')[1].trim())
-        }
-    }
-
-    const [ title, author, pageCount ] = bookInfo
+    const { title, author, pageCount, imageLinks } = bookInfo
     const pagesRead = 0
+    const imgSrc = imageLinks.thumbnail
 
-    const newBook = Book(title, author, pageCount, pagesRead)
+    const newBook = Book(title, author || bookInfo.authors[0], pageCount, pagesRead, imgSrc)
     const newBookElem = createBookHtml(newBook)
 
     libraryDiv.append(newBookElem)
@@ -244,8 +199,55 @@ const removeBook = (book) => {
     resetPage()
 }
 
-const editBook = (event) => {
+const editBookObj = (bookObj) => {
+    toggleModal()
+    addBookForm.style.display = 'none'
+    editBookForm.style.display = 'block'
 
+    const title = document.getElementById('bookTitleInput')
+    const author = document.getElementById('bookAuthorInput')
+    const pagesRead = document.getElementById('pagesReadInput')
+    const pageCount = document.getElementById('pageCountInput')
+    const bookCoverLink = document.getElementById('bookCoverLink')
+
+    title.value = bookObj.title
+    author.value = bookObj.author
+    pagesRead.value = bookObj.pagesRead
+    pageCount.value = bookObj.pageCount
+    bookCoverLink.value = bookObj.imgSrc
+
+    editBookForm.setAttribute('book_id', bookObj.id)
+}
+
+const editBookThroughForm = (e) => {
+    e.preventDefault()
+    const title = document.getElementById('bookTitleInput')
+    const author = document.getElementById('bookAuthorInput')
+    const pagesRead = document.getElementById('pagesReadInput')
+    const pageCount = document.getElementById('pageCountInput')
+    const bookCoverLink = document.getElementById('bookCoverLink')
+    const bookID = editBookForm.getAttribute('book_id')
+
+    if (!title.value || !author.value || !pagesRead.value || !pageCount.value) {
+        return false
+    }
+
+    console.log(bookID)
+
+    const bookToEdit = myLibrary.find(book => book.id === bookID)
+    bookToEdit.title = title.value
+    bookToEdit.author = author.value
+    bookToEdit.pagesRead = Number(pagesRead.value) > Number(pageCount.value) ? Number(pageCount.value) : Number(pagesRead.value)
+    bookToEdit.pageCount = pageCount.value
+    bookToEdit.imgSrc = bookCoverLink.value
+
+    addBookForm.style.display = 'block'
+    editBookForm.style.display = 'none'
+
+    console.log(editBookForm)
+
+    toggleModal()
+    resetPage()
 }
 
 const fetchFromAPI = async (event) => {
@@ -261,8 +263,13 @@ const displaySearchResults = (books) => {
     searchResults.innerHTML = ''
     let index = 0
     for (let book of books) {
-        console.log(book.volumeInfo)
-        createBookElement(book.volumeInfo, index, 'add')
+        if (book.volumeInfo.imageLinks) {
+            console.log(book.volumeInfo.imageLinks.thumbnail)
+            createBookElement(book.volumeInfo, index, 'add')
+        } else {
+            createBookElement(book.volumeInfo, index, 'add')
+        }
+
         index++
     }
 }
@@ -286,7 +293,9 @@ const createBookElement = (book, index, buttonType) => {
         addBookButton.value = `book${index}`
         addBookButton.textContent = 'Add book'
         addBookButton.classList.add('button-primary')
-        addBookButton.addEventListener('click', addBookToLibraryFromSearch)
+        addBookButton.addEventListener('click', () => {
+            addBookToLibraryFromSearch(book)
+        })
         bookButton = addBookButton
     } else if (buttonType == 'delete') {
         const deleteBookButton = document.createElement('button')
@@ -322,9 +331,25 @@ const modal = document.querySelector(".modal")
 const closeButton = document.querySelector(".close-button")
 
 const toggleModal = () => {
+    const title = document.getElementById('bookTitleInput')
+    const author = document.getElementById('bookAuthorInput')
+    const pagesRead = document.getElementById('pagesReadInput')
+    const pageCount = document.getElementById('pageCountInput')
+    const bookCoverLink = document.getElementById('bookCoverLink')
+
+    title.value = ''
+    author.value = ''
+    pagesRead.value = ''
+    pageCount.value = ''
+    bookCoverLink.value = ''
+
+
     modal.classList.toggle("show-modal")
     bookSearchModal.style.display = "none"
     addBookFormModal.style.display = "block"
+
+    addBookForm.style.display = 'block'
+    editBookForm.style.display = 'none'
 }
 
 const toggleModalAPI = () => {
@@ -371,5 +396,6 @@ searchInput.addEventListener('change', fetchFromAPI)
 addThroughForm.addEventListener('click', toggleModal)
 searchFromAPIButton.addEventListener('click', toggleModalAPI)
 addBookForm.addEventListener('click', addBookThroughForm)
+editBookForm.addEventListener('click', editBookThroughForm)
 closeButton.addEventListener("click", toggleModal)
 window.addEventListener("click", windowOnClick)

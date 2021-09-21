@@ -35,7 +35,7 @@
     <div class="row">
       <div class="navbar">
         <ul>
-          <li><a href="">My Library</a></li>
+          <li><a href="/" class="headerLink">My Library</a></li>
         </ul>
       </div>
 
@@ -43,7 +43,31 @@
         <input class="button-primary trigger searchFromAPI" type="button" value="Search for books from public library"></br>
 
         <div class="library" id="library">
-          
+          <div class="book">
+            <div class="editBook">
+              <span class="remove">Remove</span>
+              <span class="edit">Edit</span>
+            </div>
+
+            <div class="bookInfo">
+              <img src="http://books.google.com/books/content?id=fV_wAQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api" alt="One Piece Vol. 1" class="bookImage">
+              <div class="bookInfoText">
+                <div class="title">One Piece Vol. 1</div>
+                <div class="author">Eiichiro Oda</div>
+                <div class="pages">200 pages</div>
+                <div class="readStatus">Finished reading</div>
+              </div>
+            </div>
+
+            <span>Mark as read:</span>
+            <!-- Rounded switch -->
+            <div class="switchContainer">
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -84,8 +108,17 @@
                   <input class="pageCountInput" type="number" placeholder="Page count" id="pageCountInput" required>
                 </div>
 
+                <div>
+                  <label for="url">Book cover link: </label>
+                  <input class="bookCoverLink" type="url" placeholder="https://books.google.com/books/content?id=XfFvDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api" id="bookCoverLink" required>
+                </div>
+
                 <div class="row">
                   <input class="addBookForm" type="submit" id="addBookForm" value="Add book">
+                </div>
+
+                <div class="row">
+                  <input class="editBookForm" type="submit" id="editBookForm" value="Edit book" hidden>
                 </div>
               </form>
             </div>
