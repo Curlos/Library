@@ -208,6 +208,8 @@ const toggleSlider = (id) => {
         foundBook.backgroundColor = 'gray'
     }
 
+    window.localStorage.setItem('library', JSON.stringify(myLibrary))
+
     resetPage()
 }
 
