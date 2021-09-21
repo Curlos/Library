@@ -11,7 +11,7 @@ const editBookForm = document.getElementById('editBookForm')
 const readButtonSwitchContainer = document.querySelector('.switchContainer')
 const removeButton = document.querySelector('.remove')
 const editButton = document.querySelector('.edit')
-const API_KEY = process.env.API_KEY
+const API_KEY = 'AIzaSyAA44LXlUJizXoq017jBx9Q2eFdI1W6Kng'
 let myLibrary = [
 	{
 		id: "e_ktu1nzmd_gt35kc7qfs5wp9jp4n1ac",
